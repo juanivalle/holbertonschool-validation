@@ -1,15 +1,11 @@
-build:	## Generate the website from the markdown and configuration files in the directory ./dist
-	hugo > /dev/null 2>&1
+build:
+	hugo
 
+clean:
+	rm -rf dist/*
 
-clean:	## Cleanup the content of the directory ./dist
-	rm -fr dist
-
-
-post:	## Creates a post with given POST_NAME and POST_TITLE
+post:
+	rm -rf content/post/$(POST_NAME).md
 	hugo new posts/$(POST_NAME).md
-	sed -i '/title/c\title: "$(POST_TITLE)"' content/posts/$(POST_NAME).md
-
-
-help:	## Provides information about all Makefile targets defined
-	@fgrep "##" $(MAKEFILE_LIST) | fgrep -v fgrep | sed -e 's/##//'
+	sed -i 's/title:.*/title: $(POST_TITLE)/' content/posts/$(POST_NAME).md
+	sed -i 's/draft:.*/draft: false/' content/posts/$(POST_NAME).md
